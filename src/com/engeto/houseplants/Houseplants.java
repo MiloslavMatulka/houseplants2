@@ -16,6 +16,7 @@ public class Houseplants {
     public static void main(String[] args) {
         ListOfPlants listOfPlants = new ListOfPlants();
         Logger logger = Logger.getLogger(Houseplants.class.getName());
+        Scanner scanner = null;
         try {
             List<Plant> loadedList = ListOfPlants
                     .importFromFile(Settings.getFile(), "\t");
@@ -49,7 +50,7 @@ public class Houseplants {
             System.out.println("Print contents of file sorted by watering \""
                     + Settings.getFileNew()
                     + "\" (2 plants added, 1 removed):");
-            Scanner scanner = new Scanner(new File(Settings.getFileNew()));
+            scanner = new Scanner(new File(Settings.getFileNew()));
             while (scanner.hasNext()) {
                 System.out.println(scanner.nextLine());
             }
@@ -88,6 +89,8 @@ public class Houseplants {
         } catch(FileNotFoundException | PlantException e) {
             logger.log(Level.WARNING, e.getClass().getName() + " - "
                     + e.getMessage());
+        } finally {
+            scanner.close();
         }
     }
 }

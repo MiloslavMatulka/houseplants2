@@ -42,8 +42,7 @@ public class ListOfPlants {
         List<Plant> plantsList = new ArrayList<>();
         File data = new File(inputFile);
         long line = 0L;
-        try {
-            Scanner scanner = new Scanner(data);
+        try (Scanner scanner = new Scanner(data)) {
             while (scanner.hasNext()) {
                 ++line;
                 String record = scanner.nextLine();
