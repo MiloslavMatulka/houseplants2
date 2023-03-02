@@ -42,7 +42,7 @@ public class Plant implements Comparable<Plant> {
             throws PlantException {
         if (frequencyOfWatering <= 0) {
             throw new PlantException("Frequency of watering must be "
-                    + "greater than 0.");
+                    + "greater than 0 (is " + frequencyOfWatering + ")");
         }
         this.frequencyOfWatering = frequencyOfWatering;
     }
@@ -78,7 +78,7 @@ public class Plant implements Comparable<Plant> {
     public void setWatering(LocalDate watering) throws PlantException {
         if (watering.isBefore(getPlanted())) {
             throw new PlantException("Watering cannot be older than "
-                    + "planting.");
+                    + "planting");
         }
         this.watering = watering;
     }
@@ -96,15 +96,25 @@ public class Plant implements Comparable<Plant> {
     }
 
     public static Plant parsePlant(String data, String delimiter)
-            throws NumberFormatException, DateTimeParseException,
-            PlantException {
+            throws PlantException {
         String[] items = data.split(delimiter);
 
         String name = items[0];
         String notes = items[1];
-        int frequencyOfWatering = Integer.parseInt(items[2]);
-        LocalDate watering = LocalDate.parse(items[3]);
-        LocalDate planted = LocalDate.parse(items[4]);
+        int frequencyOfWatering = 0;
+        LocalDate watering = null;
+        LocalDate planted = null;
+        try {
+            frequencyOfWatering = Integer.parseInt(items[2]);
+            watering = LocalDate.parse(items[3]);
+            planted = LocalDate.parse(items[4]);
+        } catch (NumberFormatException nfe) {
+            throw new PlantException("Not a number ("
+                    + nfe.getMessage() + ")");
+        } catch (DateTimeParseException dtpe) {
+            throw new PlantException("Incorrect date format ("
+                    + dtpe.getMessage() + ")");
+        }
 
         return new Plant(name, notes, planted, watering, frequencyOfWatering);
     }

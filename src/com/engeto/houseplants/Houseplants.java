@@ -3,7 +3,6 @@ package com.engeto.houseplants;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.time.LocalDate;
-import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -86,8 +85,7 @@ public class Houseplants {
             List<Plant> loadedListWrongFrequency = ListOfPlants.importFromFile(
                     Settings.getFileWrongFrequency(), "\t");
             */
-        } catch(FileNotFoundException | NumberFormatException
-                | DateTimeParseException |PlantException e) {
+        } catch(FileNotFoundException | PlantException e) {
             logger.log(Level.WARNING, e.getClass().getName() + " - "
                     + e.getMessage());
         }
