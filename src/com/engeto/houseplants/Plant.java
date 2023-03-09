@@ -1,7 +1,6 @@
 package com.engeto.houseplants;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeParseException;
 
 public class Plant implements Comparable<Plant> {
     //region Attributes
@@ -93,30 +92,6 @@ public class Plant implements Comparable<Plant> {
         return "Plant name: " + getName() + ", watering: " + getWatering()
                 + ", recommended next watering: "
                 + getWatering().plusDays(Settings.getDefaultWatering());
-    }
-
-    public static Plant parsePlant(String data, String delimiter)
-            throws PlantException {
-        String[] items = data.split(delimiter);
-
-        String name = items[0];
-        String notes = items[1];
-        int frequencyOfWatering = 0;
-        LocalDate watering = null;
-        LocalDate planted = null;
-        try {
-            frequencyOfWatering = Integer.parseInt(items[2]);
-            watering = LocalDate.parse(items[3]);
-            planted = LocalDate.parse(items[4]);
-        } catch (NumberFormatException nfe) {
-            throw new PlantException("Not a number ("
-                    + nfe.getMessage() + ")");
-        } catch (DateTimeParseException dtpe) {
-            throw new PlantException("Incorrect date format ("
-                    + dtpe.getMessage() + ")");
-        }
-
-        return new Plant(name, notes, planted, watering, frequencyOfWatering);
     }
 
     public String exportToString(String delimiter) {

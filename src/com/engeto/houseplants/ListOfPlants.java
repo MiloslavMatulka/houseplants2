@@ -5,6 +5,8 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -46,7 +48,7 @@ public class ListOfPlants {
             while (scanner.hasNext()) {
                 ++line;
                 String record = scanner.nextLine();
-                plantsList.add(Plant.parsePlant(record, delimiter));
+                plantsList.add(parsePlant(record, delimiter));
             }
         } catch (FileNotFoundException fnfe) {
             throw new PlantException("File " + fnfe.getMessage());
@@ -54,6 +56,30 @@ public class ListOfPlants {
             throw new PlantException(pe.getMessage() + ", line " + line);
         }
         return plantsList;
+    }
+
+    public static Plant parsePlant(String data, String delimiter)
+            throws PlantException {
+        String[] items = data.split(delimiter);
+
+        String name = items[0];
+        String notes = items[1];
+        int frequencyOfWatering = 0;
+        LocalDate watering = null;
+        LocalDate planted = null;
+        try {
+            frequencyOfWatering = Integer.parseInt(items[2]);
+            watering = LocalDate.parse(items[3]);
+            planted = LocalDate.parse(items[4]);
+        } catch (NumberFormatException nfe) {
+            throw new PlantException("Not a number ("
+                    + nfe.getMessage() + ")");
+        } catch (DateTimeParseException dtpe) {
+            throw new PlantException("Incorrect date format ("
+                    + dtpe.getMessage() + ")");
+        }
+
+        return new Plant(name, notes, planted, watering, frequencyOfWatering);
     }
 
     public void removePlant(Plant plant) {
